@@ -113,7 +113,6 @@ remoteBtn.addEventListener("click", () => {
 
 // handle socket events
 socket.on('joined', (users) => {
-    console.log("Users joined", users);
     const allusers = document.getElementById('allusers');
     allusers.innerHTML = '';
     Object.values(users).forEach(user => {
@@ -185,7 +184,6 @@ async function startCall(user) {
     if(username.value===""){
         alert(`Please create your user first to call "${user}"`)
     }
-    console.log("Starting call with", user);
     const pc = PeerConnection.getInstance();
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
