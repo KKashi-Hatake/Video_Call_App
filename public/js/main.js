@@ -33,8 +33,10 @@ const PeerConnection = (function(){
 
 
         // listen for remote stream and add to peer connection
+        const remoteStream = new MediaStream();
+        remoteVideo.srcObject = remoteStream;
         peerConnection.ontrack = (event) => {
-            remoteVideo.srcObject = event.streams[0];
+            remoteStream.addTrack(event.track);
         };
 
 
@@ -55,6 +57,12 @@ const PeerConnection = (function(){
                 peerConnection = createPeerConnection();
             }
             return peerConnection;
+        },
+        reset:()=>{
+            if(peerConnection){
+                peerConnection.close();
+                peerConnection = null;
+            }
         }
     }
 })()
@@ -203,11 +211,9 @@ async function startMyVideo(){
 }
 startMyVideo()
 
-async function endCall() {
-    const pc = PeerConnection.getInstance();
-    if(pc){
-        pc.close()
-    }
+function endCall() {
+    PeerConnection.reset();
+    remoteVideo.srcObject = null;
 }
 
 

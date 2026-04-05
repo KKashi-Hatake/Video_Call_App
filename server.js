@@ -53,9 +53,17 @@ io.on("connection", (socket) => {
         io.to(allUsers[caller[0]].id).emit("call-ended")
         io.to(allUsers[caller[1]].id).emit("call-ended")
     })
+
+    socket.on("disconnect", ()=>{
+        const user = Object.keys(allUsers).find(key => allUsers[key].id === socket.id);
+        if(user){
+            delete allUsers[user];
+            io.emit('joined', allUsers);
+        }
+    })
 });
 
-server.listen(3000, () => {
-    console.log("Server is running on port 3000");
+server.listen(9001, () => {
+    console.log("Server is running on port 9001");
 });
 
